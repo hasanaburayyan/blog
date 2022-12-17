@@ -1,0 +1,100 @@
+{
+  "version": "21.0.0",
+  "artifacts": {
+    "BlogStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "BlogStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "BlogStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://248534195903/us-east-1",
+      "properties": {
+        "templateFile": "BlogStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::248534195903:role/cdk-hnb659fds-deploy-role-248534195903-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::248534195903:role/cdk-hnb659fds-cfn-exec-role-248534195903-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-248534195903-us-east-1/aac8c49544aa651886a81f73c17e72ad8f1b69493c17c618915f9381072a274a.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "BlogStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::248534195903:role/cdk-hnb659fds-lookup-role-248534195903-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "BlogStack.assets"
+      ],
+      "metadata": {
+        "/BlogStack/BlogBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BlogBucket3E358F18"
+          }
+        ],
+        "/BlogStack/BlogBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BlogBucketPolicy81EFCEDB"
+          }
+        ],
+        "/BlogStack/OriginAccessIdentity/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OriginAccessIdentityDF1E3CAC"
+          }
+        ],
+        "/BlogStack/BlogDistribution/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BlogDistribution9337E81F"
+          }
+        ],
+        "/BlogStack/BlogRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BlogRecordCF975FF7"
+          }
+        ],
+        "/BlogStack/AWSCloudFrontPartitionHostedZoneIdMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/BlogStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/BlogStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/BlogStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "BlogStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

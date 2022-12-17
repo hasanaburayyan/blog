@@ -1,0 +1,193 @@
+{
+ "Resources": {
+  "BlogBucket3E358F18": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "hasan-joint-blog"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "BlogStack/BlogBucket/Resource"
+   }
+  },
+  "BlogBucketPolicy81EFCEDB": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "BlogBucket3E358F18"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "CanonicalUser": {
+         "Fn::GetAtt": [
+          "OriginAccessIdentityDF1E3CAC",
+          "S3CanonicalUserId"
+         ]
+        }
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "BlogBucket3E358F18",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BlogStack/BlogBucket/Policy/Resource"
+   }
+  },
+  "OriginAccessIdentityDF1E3CAC": {
+   "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+   "Properties": {
+    "CloudFrontOriginAccessIdentityConfig": {
+     "Comment": "Allows CloudFront to reach the bucket"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BlogStack/OriginAccessIdentity/Resource"
+   }
+  },
+  "BlogDistribution9337E81F": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "DefaultCacheBehavior": {
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "Compress": true,
+      "TargetOriginId": "BlogStackBlogDistributionOrigin16A1469C5",
+      "ViewerProtocolPolicy": "allow-all"
+     },
+     "DefaultRootObject": "index.html",
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "DomainName": {
+        "Fn::GetAtt": [
+         "BlogBucket3E358F18",
+         "RegionalDomainName"
+        ]
+       },
+       "Id": "BlogStackBlogDistributionOrigin16A1469C5",
+       "S3OriginConfig": {
+        "OriginAccessIdentity": {
+         "Fn::Join": [
+          "",
+          [
+           "origin-access-identity/cloudfront/",
+           {
+            "Ref": "OriginAccessIdentityDF1E3CAC"
+           }
+          ]
+         ]
+        }
+       }
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BlogStack/BlogDistribution/Resource"
+   }
+  },
+  "BlogRecordCF975FF7": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "blog.therealhasan.com.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "BlogDistribution9337E81F",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z06723691YVVZYVN1USF6"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BlogStack/BlogRecord/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22O3YoCMQxGn8X7TtZRhL31B2EvFmV8gGVMo2RmbKVNXZbSd9+pFfTCq+/L4YRkBos5TCftr69Q99XAR4gHabFXI/qJfg5xFbAnUeuTebQSezsw/j1xmZPCwQZ9ctYIxJ3jM5slInn/pckIy31jnZ1tdt4aG/bi+BiErcn665yUs0Fo/DouG0LrdDZKO5CkpBryNjikzL/b65XNuSgFJ2WsJuj8x63+hHoG9aTzzJUL4/ELQVPyHx8MmbAZAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BlogStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Mappings": {
+  "AWSCloudFrontPartitionHostedZoneIdMap": {
+   "aws": {
+    "zoneId": "Z2FDTNDATAQYW2"
+   },
+   "aws-cn": {
+    "zoneId": "Z3RFFRIM2A3IF5"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
