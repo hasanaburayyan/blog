@@ -89,6 +89,14 @@
               "version": "2.53.0"
             }
           },
+          "CertificateACM": {
+            "id": "CertificateACM",
+            "path": "BlogStack/CertificateACM",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.53.0"
+            }
+          },
           "OriginAccessIdentity": {
             "id": "OriginAccessIdentity",
             "path": "BlogStack/OriginAccessIdentity",
@@ -162,13 +170,22 @@
                       "defaultCacheBehavior": {
                         "pathPattern": "*",
                         "targetOriginId": "BlogStackBlogDistributionOrigin16A1469C5",
-                        "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                        "cachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
                         "compress": true,
                         "viewerProtocolPolicy": "allow-all"
                       },
+                      "aliases": [
+                        "therealhasan.com",
+                        "*.therealhasan.com"
+                      ],
                       "defaultRootObject": "index.html",
                       "httpVersion": "http2",
-                      "ipv6Enabled": true
+                      "ipv6Enabled": true,
+                      "viewerCertificate": {
+                        "acmCertificateArn": "arn:aws:acm:us-east-1:248534195903:certificate/287bbaa3-96a1-416a-b0dd-d7bd6551acc4",
+                        "minimumProtocolVersion": "TLSv1.2_2021",
+                        "sslSupportMethod": "sni-only"
+                      }
                     }
                   }
                 },

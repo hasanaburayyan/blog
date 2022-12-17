@@ -68,8 +68,12 @@
    "Type": "AWS::CloudFront::Distribution",
    "Properties": {
     "DistributionConfig": {
+     "Aliases": [
+      "therealhasan.com",
+      "*.therealhasan.com"
+     ],
      "DefaultCacheBehavior": {
-      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
       "Compress": true,
       "TargetOriginId": "BlogStackBlogDistributionOrigin16A1469C5",
       "ViewerProtocolPolicy": "allow-all"
@@ -101,7 +105,12 @@
         }
        }
       }
-     ]
+     ],
+     "ViewerCertificate": {
+      "AcmCertificateArn": "arn:aws:acm:us-east-1:248534195903:certificate/287bbaa3-96a1-416a-b0dd-d7bd6551acc4",
+      "MinimumProtocolVersion": "TLSv1.2_2021",
+      "SslSupportMethod": "sni-only"
+     }
     }
    },
    "Metadata": {

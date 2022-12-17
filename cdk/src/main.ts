@@ -5,6 +5,8 @@ import * as cf from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as r53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
+import * as certificate from 'aws-cdk-lib/aws-certificatemanager';
+import { CachePolicy } from 'aws-cdk-lib/aws-cloudfront';
 
 export class BlogStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -16,11 +18,16 @@ export class BlogStack extends Stack {
 
     bucket;
 
+    const cert = certificate.Certificate.fromCertificateArn(this, 'CertificateACM', 'arn:aws:acm:us-east-1:248534195903:certificate/287bbaa3-96a1-416a-b0dd-d7bd6551acc4');
+
     const oaid = new cf.OriginAccessIdentity(this, 'OriginAccessIdentity');
 
     const cloudfrontDistro = new cf.Distribution(this, 'BlogDistribution', {
+      domainNames: ['therealhasan.com', '*.therealhasan.com'],
+      certificate: cert,
       defaultBehavior: {
-        origin: new origins.S3Origin(bucket, {originAccessIdentity: oaid})
+        origin: new origins.S3Origin(bucket, {originAccessIdentity: oaid}),
+        cachePolicy: CachePolicy.CACHING_DISABLED
       },
       defaultRootObject: 'index.html'
     })
